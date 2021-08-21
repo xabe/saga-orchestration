@@ -48,6 +48,48 @@
     ]
   },
   {
+    "name": "OrderCreatedEvent",
+    "namespace": "com.xabe.avro.v1",
+    "type": "record",
+    "fields": [
+      {
+        "name": "order",
+        "type": "Order"
+      },
+      {
+        "name": "updated_at",
+        "type": [
+          "null",
+          {
+            "type": "long",
+            "logicalType": "timestamp-millis"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "OrderRejectedEvent",
+    "namespace": "com.xabe.avro.v1",
+    "type": "record",
+    "fields": [
+      {
+        "name": "order",
+        "type": "Order"
+      },
+      {
+        "name": "updated_at",
+        "type": [
+          "null",
+          {
+            "type": "long",
+            "logicalType": "timestamp-millis"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "name": "OrderCreateCommand",
     "namespace": "com.xabe.avro.v1",
     "type": "record",
@@ -65,6 +107,10 @@
         "type": "string"
       },
       {
+        "name": "price",
+        "type": "long"
+      },
+      {
         "name": "sent_at",
         "type": [
           "null",
@@ -77,16 +123,24 @@
     ]
   },
   {
-    "name": "OrderCreatedEvent",
+    "name": "OrderRejectCommand",
     "namespace": "com.xabe.avro.v1",
     "type": "record",
     "fields": [
       {
-        "name": "order",
-        "type": "Order"
+        "name": "purchase_id",
+        "type": "string"
       },
       {
-        "name": "updated_at",
+        "name": "user_id",
+        "type": "string"
+      },
+      {
+        "name": "productId",
+        "type": "string"
+      },
+      {
+        "name": "sent_at",
         "type": [
           "null",
           {

@@ -18,7 +18,7 @@ quarkus:
       - "-H:ResourceConfigurationFiles=resources-config.json"
       - "-H:ReflectionConfigurationFiles=reflection-config.json"
   package:
-    main-class: com.xabe.orchestation.App
+    main-class: com.xabe.orchestration.order.App
   log:
     console:
       enable: true
@@ -30,15 +30,15 @@ quarkus:
         level: INFO
       io.smallrye.reactive.messaging.kafka:
         level: DEBUG
-      com.xabe.orchestation:
+      com.xabe:
         level: DEBUG
   application:
     name: order-service
   banner:
     enabled: false
   http:
-    test-port: 8009
-    port: 8009
+    test-port: 8001
+    port: 8001
     root-path: /api
   datasource:
     db-kind: postgresql

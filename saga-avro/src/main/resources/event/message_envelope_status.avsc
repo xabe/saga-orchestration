@@ -11,9 +11,12 @@
     },
     {
       "name": "payload",
-      "doc": "Envelope's content. It could be any Order command.",
+      "doc": "Envelope's content. It could be any command.",
       "type": [
-        "OrderCreatedEvent"
+        "OrderCreatedEvent",
+        "OrderRejectedEvent",
+        "PaymentCreatedEvent",
+        "PaymentCanceledEvent"
       ]
     }
   ]

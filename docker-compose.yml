@@ -15,12 +15,21 @@ services:
       - 8081-8083:8081-8083       # REST Proxy, Schema Registry, Kafka Connect ports
       - 9581-9585:9581-9585       # JMX Ports
       - 9092:9092                 # Kafka Broker
-  postgres:
+  postgres-order:
     image: postgres
     restart: always
     ports:
       - "5432:5432"
     environment:
       POSTGRES_DB: orders
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+  postgres-payment:
+    image: postgres
+    restart: always
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: payments
       POSTGRES_USER: myuser
       POSTGRES_PASSWORD: mypassword
