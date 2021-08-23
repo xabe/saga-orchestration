@@ -10,6 +10,6 @@ public interface PaymentUseCase {
 
   Uni<Payment> getPayment(Long id);
 
-  Uni<Payment> create(Payment order);
+  Uni<Payment> create(Payment payment);
 
 }

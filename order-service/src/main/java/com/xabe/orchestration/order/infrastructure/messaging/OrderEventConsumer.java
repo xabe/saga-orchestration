@@ -54,7 +54,7 @@ public class OrderEventConsumer implements EventConsumer {
 
   private Consumer<Throwable> sendOrderNotCreated(final Order order) {
     return throwable -> {
-      this.eventPublisher.tryPublish(this.messagingMapper.toEvent(order.toBuilder().status(OrderStatus.REJECTED).build()));
+      this.eventPublisher.tryPublish(this.messagingMapper.toEvent(order.toBuilder().status(OrderStatus.CANCELED).build()));
       this.logger.error("Error to save Order: {}", order, throwable);
     };
   }

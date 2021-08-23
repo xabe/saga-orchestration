@@ -52,7 +52,7 @@ public class ResourceIntegrationTest {
 
   @Test
   @Order(1)
-  public void shouldCreateOrder() throws Exception {
+  public void shouldCreatePayment() throws Exception {
     //Given
     final PaymentPayload paymentPayload =
         PaymentPayload.builder().productId(PRODUCT_ID).userId(USER_ID).purchaseId(PURCHASE_ID).price(PRICE).build();
@@ -72,7 +72,7 @@ public class ResourceIntegrationTest {
 
   @Test
   @Order(2)
-  public void shouldGetOrder() throws Exception {
+  public void shouldGetPayment() throws Exception {
     //Given
 
     //When
@@ -95,7 +95,7 @@ public class ResourceIntegrationTest {
 
   @Test
   @Order(3)
-  public void shouldGetOrders() {
+  public void shouldGetPayments() {
 
     final HttpResponse<PaymentPayload[]> response = Unirest.get(String.format("http://localhost:%d/api/payments", this.serverPort))
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON).asObject(PaymentPayload[].class);

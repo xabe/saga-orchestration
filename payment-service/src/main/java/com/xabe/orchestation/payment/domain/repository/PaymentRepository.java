@@ -10,5 +10,5 @@ public interface PaymentRepository {
 
   Uni<List<Payment>> getPayments();
 
-  Uni<Payment> create(Payment order);
+  Uni<Payment> create(Payment payment);
 }

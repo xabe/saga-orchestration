@@ -21,13 +21,13 @@ public class PaymentRepositoryImpl implements PaymentRepository {
 
   @Override
   public Uni<Payment> getPayment(final Long id) {
-    this.logger.debug("Get Order {}", id);
+    this.logger.debug("Get payment {}", id);
     return this.paymentRepositoryPanache.findById(id).map(this.persistenceMapper::toEntity);
   }
 
   @Override
   public Uni<List<Payment>> getPayments() {
-    this.logger.debug("Get Orders");
+    this.logger.debug("Get payments");
     return this.paymentRepositoryPanache.listAll().map(this.persistenceMapper::toEntities);
   }
 

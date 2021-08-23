@@ -18,6 +18,10 @@ public class UrlUtil {
 
   private final String urlSchemaRegistryCompatibilityPayment;
 
+  private final String urlSchemaRegistryShipping;
+
+  private final String urlSchemaRegistryCompatibilityShipping;
+
   private final String urlSchemaRegistryStatus;
 
   private final String urlSchemaRegistryCompatibilityStatus;
@@ -27,9 +31,11 @@ public class UrlUtil {
     final String registryPort = System.getProperty("schemaregistry.port", "8081");
     this.urlSchemaRegistryOrder = format(SCHEMA_REGISTRY, registryHost, registryPort, "orders.v1");
     this.urlSchemaRegistryPayment = format(SCHEMA_REGISTRY, registryHost, registryPort, "payments.v1");
+    this.urlSchemaRegistryShipping = format(SCHEMA_REGISTRY, registryHost, registryPort, "shipments.v1");
     this.urlSchemaRegistryStatus = format(SCHEMA_REGISTRY, registryHost, registryPort, "status.v1");
     this.urlSchemaRegistryCompatibilityOrder = format(SCHEMA_REGISTRY_COMPATIBILITY, registryHost, registryPort, "orders.v1");
     this.urlSchemaRegistryCompatibilityPayment = format(SCHEMA_REGISTRY_COMPATIBILITY, registryHost, registryPort, "payments.v1");
+    this.urlSchemaRegistryCompatibilityShipping = format(SCHEMA_REGISTRY_COMPATIBILITY, registryHost, registryPort, "shipments.v1");
     this.urlSchemaRegistryCompatibilityStatus = format(SCHEMA_REGISTRY_COMPATIBILITY, registryHost, registryPort, "status.v1");
   }
 
@@ -59,6 +65,14 @@ public class UrlUtil {
 
   public String getSchemaRegistryPayment() {
     return this.urlSchemaRegistryPayment;
+  }
+
+  public String getUrlSchemaRegistryShipping() {
+    return this.urlSchemaRegistryShipping;
+  }
+
+  public String getUrlSchemaRegistryCompatibilityShipping() {
+    return this.urlSchemaRegistryCompatibilityShipping;
   }
 }
 

@@ -84,7 +84,7 @@ class EventConsumerTest {
   }
 
   private Metadata createMetaData() {
-    return Metadata.newBuilder().setDomain("order").setName("order").setAction("update").setVersion("vTest")
+    return Metadata.newBuilder().setDomain("payment").setName("payment").setAction("update").setVersion("vTest")
         .setTimestamp(DateTimeFormatter.ISO_DATE_TIME.format(OffsetDateTime.now())).build();
   }
 

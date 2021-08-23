@@ -106,7 +106,7 @@ class OrderEventConsumerTest {
     assertThat(result.getProductId(), is(event.getProductId()));
     assertThat(result.getCreatedAt(), is(event.getSentAt()));
     assertThat(result.getPrice(), is(event.getPrice()));
-    assertThat(result.getStatus(), is("REJECTED"));
+    assertThat(result.getStatus(), is("CANCELED"));
   }
 
 }

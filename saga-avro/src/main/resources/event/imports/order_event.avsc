@@ -31,7 +31,7 @@
           "type": "enum",
           "symbols": [
             "CREATED",
-            "REJECTED"
+            "CANCELED"
           ]
         }
       },
@@ -69,7 +69,7 @@
     ]
   },
   {
-    "name": "OrderRejectedEvent",
+    "name": "OrderCanceledEvent",
     "namespace": "com.xabe.avro.v1",
     "type": "record",
     "fields": [
@@ -123,10 +123,14 @@
     ]
   },
   {
-    "name": "OrderRejectCommand",
+    "name": "OrderCanceledCommand",
     "namespace": "com.xabe.avro.v1",
     "type": "record",
     "fields": [
+      {
+        "name": "order_id",
+        "type": "long"
+      },
       {
         "name": "purchase_id",
         "type": "string"

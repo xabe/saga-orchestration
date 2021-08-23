@@ -54,7 +54,7 @@ public class PaymentEventConsumer implements EventConsumer {
 
   private Consumer<Throwable> sendOrderNotCreated(final Payment payment) {
     return throwable -> {
-      this.eventPublisher.tryPublish(this.messagingMapper.toEvent(payment.toBuilder().status(PaymentStatus.REJECTED).build()));
+      this.eventPublisher.tryPublish(this.messagingMapper.toEvent(payment.toBuilder().status(PaymentStatus.CANCELED).build()));
       this.logger.error("Error to save Order: {}", payment, throwable);
     };
   }

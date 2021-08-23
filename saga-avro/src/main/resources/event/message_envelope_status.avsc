@@ -14,9 +14,11 @@
       "doc": "Envelope's content. It could be any command.",
       "type": [
         "OrderCreatedEvent",
-        "OrderRejectedEvent",
+        "OrderCanceledEvent",
         "PaymentCreatedEvent",
-        "PaymentCanceledEvent"
+        "PaymentCanceledEvent",
+        "ShippingCreatedEvent",
+        "ShippingCanceledEvent"
       ]
     }
   ]

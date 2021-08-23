@@ -18,7 +18,7 @@ import org.mapstruct.NullValueCheckStrategy;
     nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS, componentModel = "cdi")
 public interface MessagingMapper {
 
-  PaymentCreateCommandEvent toAvroCommandEvent(PaymentCreateCommand orderCreateCommand);
+  PaymentCreateCommandEvent toAvroCommandEvent(PaymentCreateCommand paymentCreateCommand);
 
   @Mapping(source = "sentAt", target = "createdAt")
   Payment toEntity(PaymentCreateCommandEvent paymentCreateCommandEvent);
@@ -34,6 +34,5 @@ public interface MessagingMapper {
   default OffsetDateTime map(final Instant value) {
     return Objects.isNull(value) ? OffsetDateTime.now() : value.atOffset(ZoneOffset.UTC);
   }
-
-
+  
 }

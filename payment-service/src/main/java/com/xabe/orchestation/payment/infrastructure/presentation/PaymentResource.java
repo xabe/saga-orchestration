@@ -46,8 +46,8 @@ public class PaymentResource {
   }
 
   @POST
-  public Uni<Response> create(@Valid final PaymentPayload orderPayload, @Context final UriInfo uriInfo) {
-    return this.paymentUseCase.create(this.presentationMapper.toEntity(orderPayload))
+  public Uni<Response> create(@Valid final PaymentPayload paymentPayload, @Context final UriInfo uriInfo) {
+    return this.paymentUseCase.create(this.presentationMapper.toEntity(paymentPayload))
         .map(this.createResponseSuccessCreate(uriInfo))
         .onFailure().recoverWithItem(() -> Response.status(Response.Status.BAD_REQUEST).build());
   }

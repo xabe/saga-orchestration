@@ -31,7 +31,7 @@
           "type": "enum",
           "symbols": [
             "ACCEPTED",
-            "REJECTED"
+            "CANCELED"
           ]
         }
       },
@@ -127,6 +127,10 @@
     "namespace": "com.xabe.avro.v1",
     "type": "record",
     "fields": [
+      {
+        "name": "payment_id",
+        "type": "long"
+      },
       {
         "name": "purchase_id",
         "type": "string"
