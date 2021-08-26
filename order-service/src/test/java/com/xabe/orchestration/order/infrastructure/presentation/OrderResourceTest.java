@@ -4,7 +4,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -114,8 +113,8 @@ class OrderResourceTest {
     final Order order = Order.builder().productId("1").userId("2").price(1L).build();
     final UriInfo uriInfo = mock(UriInfo.class);
     final UriBuilder uriBuilder = new UriBuilderImpl();
-    final Long uuid = 1L;
-    when(this.orderUseCase.create(eq(order))).thenReturn(Uni.createFrom().item(order.toBuilder().id(1L).build()));
+    final Long id = 1L;
+    when(this.orderUseCase.create(order)).thenReturn(Uni.createFrom().item(order.toBuilder().id(1L).build()));
     when(uriInfo.getRequestUriBuilder()).thenReturn(uriBuilder);
 
     //When
@@ -127,7 +126,7 @@ class OrderResourceTest {
     assertThat(response.getLocation(), is(notNullValue()));
     assertThat(response.getStatus(), is(Response.Status.CREATED.getStatusCode()));
     assertThat(response.getLocation(), is(notNullValue()));
-    assertThat(response.getLocation(), is(new UriBuilderImpl().path(uuid.toString()).build()));
+    assertThat(response.getLocation(), is(new UriBuilderImpl().path(id.toString()).build()));
   }
 
   @Test
@@ -142,6 +141,49 @@ class OrderResourceTest {
 
     //When
     final Uni<Response> result = this.orderResource.create(orderPayload, uriInfo);
+
+    //Then
+    assertThat(result, is(notNullValue()));
+    final Response response = result.subscribeAsCompletionStage().get();
+    assertThat(response.getStatus(), is(Status.BAD_REQUEST.getStatusCode()));
+  }
+
+  @Test
+  public void shouldUpdateOrder() throws Exception {
+    //Given
+    final OrderPayload orderPayload = OrderPayload.builder().productId("1").userId("2").price(1L).build();
+    final Order order = Order.builder().productId("1").userId("2").price(1L).build();
+    final UriInfo uriInfo = mock(UriInfo.class);
+    final UriBuilder uriBuilder = new UriBuilderImpl();
+    final Long id = 1L;
+    when(this.orderUseCase.update(id, order)).thenReturn(Uni.createFrom().item(order.toBuilder().id(1L).build()));
+    when(uriInfo.getRequestUriBuilder()).thenReturn(uriBuilder);
+
+    //When
+    final Uni<Response> result = this.orderResource.update(id, orderPayload, uriInfo);
+
+    //Then
+    assertThat(result, is(notNullValue()));
+    final Response response = result.subscribeAsCompletionStage().get();
+    assertThat(response.getLocation(), is(notNullValue()));
+    assertThat(response.getStatus(), is(Status.NO_CONTENT.getStatusCode()));
+    assertThat(response.getLocation(), is(notNullValue()));
+    assertThat(response.getLocation(), is(new UriBuilderImpl().build()));
+  }
+
+  @Test
+  public void shouldUpdatedOrderError() throws Exception {
+    //Given
+    final OrderPayload orderPayload = OrderPayload.builder().productId("1").userId("2").price(1L).build();
+    final Order order = Order.builder().productId("1").userId("2").price(1L).build();
+    final UriInfo uriInfo = mock(UriInfo.class);
+    final UriBuilder uriBuilder = new UriBuilderImpl();
+    final Long id = 1L;
+    when(this.orderUseCase.update(id, order)).thenReturn(Uni.createFrom().failure(RuntimeException::new));
+    when(uriInfo.getRequestUriBuilder()).thenReturn(uriBuilder);
+
+    //When
+    final Uni<Response> result = this.orderResource.update(id, orderPayload, uriInfo);
 
     //Then
     assertThat(result, is(notNullValue()));

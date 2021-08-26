@@ -6,6 +6,7 @@ import java.util.List;
 import org.mapstruct.CollectionMappingStrategy;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.NullValueCheckStrategy;
 
 @Mapper(injectionStrategy = InjectionStrategy.CONSTRUCTOR, collectionMappingStrategy = CollectionMappingStrategy.ADDER_PREFERRED,
@@ -16,5 +17,6 @@ public interface PersistenceMapper {
 
   List<Shipping> toEntities(List<ShippingDTO> shippingDTOS);
 
+  @Mapping(target = "id", ignore = true)
   ShippingDTO toDTO(Shipping shipping);
 }

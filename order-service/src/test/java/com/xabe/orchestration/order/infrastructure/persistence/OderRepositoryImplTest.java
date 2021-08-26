@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -100,6 +101,72 @@ class OderRepositoryImplTest {
     assertThat(orderResult.getStatus().name(), is(orderDTO.getStatus().name()));
     assertThat(orderResult.getCreatedAt(), is(orderDTO.getCreatedAt()));
     final OrderDTO value = argumentCaptor.getValue();
+    assertThat(value.getId(), is(nullValue()));
+    assertThat(value.getPurchaseId(), is(order.getPurchaseId()));
+    assertThat(value.getUserId(), is(order.getUserId()));
+    assertThat(value.getProductId(), is(order.getProductId()));
+    assertThat(value.getPrice(), is(order.getPrice()));
+    assertThat(value.getStatus().name(), is(order.getStatus().name()));
+    assertThat(value.getCreatedAt(), is(order.getCreatedAt()));
+  }
+
+  @Test
+  public void shouldUpdateOrderNew() throws Exception {
+    //Given
+    final Long id = 1L;
+    final Order order = OrderMother.createOrder();
+    final OrderDTO orderDTO = OrderMother.createOrderDTO();
+    final ArgumentCaptor<OrderDTO> argumentCaptor = ArgumentCaptor.forClass(OrderDTO.class);
+    when(this.orderRepositoryPanache.findById(id)).thenReturn(Uni.createFrom().nullItem());
+    when(this.orderRepositoryPanache.persistAndFlush(argumentCaptor.capture())).thenReturn(Uni.createFrom().item(orderDTO));
+
+    //When
+    final Uni<Order> result = this.orderRepository.update(id, order);
+
+    //Then
+    assertThat(result, is(notNullValue()));
+    final Order orderResult = result.subscribeAsCompletionStage().get();
+    assertThat(orderResult.getId(), is(orderDTO.getId()));
+    assertThat(orderResult.getPurchaseId(), is(orderDTO.getPurchaseId()));
+    assertThat(orderResult.getUserId(), is(orderDTO.getUserId()));
+    assertThat(orderResult.getProductId(), is(orderDTO.getProductId()));
+    assertThat(orderResult.getPrice(), is(orderDTO.getPrice()));
+    assertThat(orderResult.getStatus().name(), is(orderDTO.getStatus().name()));
+    assertThat(orderResult.getCreatedAt(), is(orderDTO.getCreatedAt()));
+    final OrderDTO value = argumentCaptor.getValue();
+    assertThat(value.getId(), is(nullValue()));
+    assertThat(value.getPurchaseId(), is(order.getPurchaseId()));
+    assertThat(value.getUserId(), is(order.getUserId()));
+    assertThat(value.getProductId(), is(order.getProductId()));
+    assertThat(value.getPrice(), is(order.getPrice()));
+    assertThat(value.getStatus().name(), is(order.getStatus().name()));
+    assertThat(value.getCreatedAt(), is(order.getCreatedAt()));
+  }
+
+  @Test
+  public void shouldUpdateOrderOld() throws Exception {
+    //Given
+    final Long id = 1L;
+    final Order order = OrderMother.createOrderNew();
+    final OrderDTO orderDTO = OrderMother.createOrderDTO();
+    final ArgumentCaptor<OrderDTO> argumentCaptor = ArgumentCaptor.forClass(OrderDTO.class);
+    when(this.orderRepositoryPanache.findById(id)).thenReturn(Uni.createFrom().item(orderDTO));
+    when(this.orderRepositoryPanache.persistAndFlush(argumentCaptor.capture())).thenReturn(Uni.createFrom().item(orderDTO));
+
+    //When
+    final Uni<Order> result = this.orderRepository.update(id, order);
+
+    //Then
+    assertThat(result, is(notNullValue()));
+    final Order orderResult = result.subscribeAsCompletionStage().get();
+    assertThat(orderResult.getId(), is(orderDTO.getId()));
+    assertThat(orderResult.getPurchaseId(), is(orderDTO.getPurchaseId()));
+    assertThat(orderResult.getUserId(), is(orderDTO.getUserId()));
+    assertThat(orderResult.getProductId(), is(orderDTO.getProductId()));
+    assertThat(orderResult.getPrice(), is(orderDTO.getPrice()));
+    assertThat(orderResult.getStatus().name(), is(orderDTO.getStatus().name()));
+    assertThat(orderResult.getCreatedAt(), is(orderDTO.getCreatedAt()));
+    final OrderDTO value = argumentCaptor.getValue();
     assertThat(value.getId(), is(order.getId()));
     assertThat(value.getPurchaseId(), is(order.getPurchaseId()));
     assertThat(value.getUserId(), is(order.getUserId()));
@@ -107,7 +174,6 @@ class OderRepositoryImplTest {
     assertThat(value.getPrice(), is(order.getPrice()));
     assertThat(value.getStatus().name(), is(order.getStatus().name()));
     assertThat(value.getCreatedAt(), is(order.getCreatedAt()));
-    ;
   }
 
 }

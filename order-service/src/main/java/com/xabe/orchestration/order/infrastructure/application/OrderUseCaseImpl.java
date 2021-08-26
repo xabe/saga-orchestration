@@ -29,4 +29,10 @@ public class OrderUseCaseImpl implements OrderUseCase {
   public Uni<Order> create(final Order order) {
     return this.orderRepository.create(order);
   }
+
+  @Override
+  @ReactiveTransactional
+  public Uni<Order> update(final Long id, final Order order) {
+    return this.orderRepository.update(id, order);
+  }
 }

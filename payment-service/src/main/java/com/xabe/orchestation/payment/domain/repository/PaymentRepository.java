@@ -11,4 +11,6 @@ public interface PaymentRepository {
   Uni<List<Payment>> getPayments();
 
   Uni<Payment> create(Payment payment);
+
+  Uni<Payment> update(Long id, Payment payment);
 }

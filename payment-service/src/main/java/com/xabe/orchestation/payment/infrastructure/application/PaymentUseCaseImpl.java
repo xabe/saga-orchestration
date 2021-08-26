@@ -29,4 +29,10 @@ public class PaymentUseCaseImpl implements PaymentUseCase {
   public Uni<Payment> create(final Payment payment) {
     return this.paymentRepository.create(payment);
   }
+
+  @Override
+  @ReactiveTransactional
+  public Uni<Payment> update(final Long id, final Payment payment) {
+    return this.paymentRepository.update(id, payment);
+  }
 }

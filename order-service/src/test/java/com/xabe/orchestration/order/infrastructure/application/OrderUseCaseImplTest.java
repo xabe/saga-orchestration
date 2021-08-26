@@ -69,4 +69,19 @@ class OrderUseCaseImplTest {
     assertThat(result, is(notNullValue()));
     assertThat(result.subscribeAsCompletionStage().get(), is(notNullValue()));
   }
+
+  @Test
+  public void shouldUpdateOrder() throws Exception {
+    //Given
+    final Order order = Order.builder().build();
+    final Long id = 1L;
+    when(this.orderRepository.update(id, order)).thenReturn(Uni.createFrom().item(order));
+
+    //When
+    final Uni<Order> result = this.orderUseCase.update(id, order);
+
+    //Then
+    assertThat(result, is(notNullValue()));
+    assertThat(result.subscribeAsCompletionStage().get(), is(notNullValue()));
+  }
 }

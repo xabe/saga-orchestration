@@ -1,5 +1,6 @@
 package com.xabe.orchestation.shipping.infrastructure.integration;
 
+import static com.xabe.orchestation.shipping.infrastructure.presentation.payload.ShippingStatusPayload.CANCELED;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.hasSize;
@@ -45,6 +46,8 @@ public class ResourceIntegrationTest {
 
   private String url;
 
+  private ShippingPayload shippingPayload;
+
   @BeforeAll
   public static void init() throws IOException {
     Unirest.config().setObjectMapper(new GsonObjectMapper(Converters.registerAll(new GsonBuilder()).create()));
@@ -83,14 +86,14 @@ public class ResourceIntegrationTest {
     assertThat(response, is(notNullValue()));
     assertThat(response.getStatus(), is(200));
     assertThat(response.getBody(), is(notNullValue()));
-    final ShippingPayload shippingPayload = response.getBody();
-    assertThat(shippingPayload.getId(), is(notNullValue()));
-    assertThat(shippingPayload.getPurchaseId(), is(PURCHASE_ID));
-    assertThat(shippingPayload.getProductId(), is(PRODUCT_ID));
-    assertThat(shippingPayload.getUserId(), is(USER_ID));
-    assertThat(shippingPayload.getPrice(), is(PRICE));
-    assertThat(shippingPayload.getStatus().name(), is("ACCEPTED"));
-    assertThat(shippingPayload.getCreatedAt(), is(notNullValue()));
+    this.shippingPayload = response.getBody();
+    assertThat(this.shippingPayload.getId(), is(notNullValue()));
+    assertThat(this.shippingPayload.getPurchaseId(), is(PURCHASE_ID));
+    assertThat(this.shippingPayload.getProductId(), is(PRODUCT_ID));
+    assertThat(this.shippingPayload.getUserId(), is(USER_ID));
+    assertThat(this.shippingPayload.getPrice(), is(PRICE));
+    assertThat(this.shippingPayload.getStatus().name(), is("ACCEPTED"));
+    assertThat(this.shippingPayload.getCreatedAt(), is(notNullValue()));
   }
 
   @Test
@@ -103,6 +106,25 @@ public class ResourceIntegrationTest {
     assertThat(response, is(notNullValue()));
     assertThat(response.getStatus(), is(200));
     assertThat(response.getBody().length, is(greaterThanOrEqualTo(1)));
+  }
+
+  @Test
+  @Order(4)
+  public void givenAShippingPayloadWhenInvokePutThenReturnUpdatePayload() throws Exception {
+    //Given
+    final ShippingPayload payload = this.shippingPayload.toBuilder().status(CANCELED).build();
+
+    //When
+    final HttpResponse<JsonNode> response = Unirest.put(this.url)
+        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON).body(payload).asJson();
+
+    //Then
+    assertThat(response, is(notNullValue()));
+    assertThat(response.getStatus(), is(204));
+    final List<String> locations = response.getHeaders().get(HttpHeaders.LOCATION);
+    assertThat(locations, is(notNullValue()));
+    assertThat(locations, is(hasSize(1)));
+    this.url = locations.get(0);
   }
 
 }

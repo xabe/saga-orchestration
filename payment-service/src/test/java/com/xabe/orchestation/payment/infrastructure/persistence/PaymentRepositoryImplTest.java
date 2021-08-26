@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -100,6 +101,72 @@ class PaymentRepositoryImplTest {
     assertThat(paymentResult.getStatus().name(), is(paymentDTO.getStatus().name()));
     assertThat(paymentResult.getCreatedAt(), is(paymentDTO.getCreatedAt()));
     final PaymentDTO value = argumentCaptor.getValue();
+    assertThat(value.getId(), is(nullValue()));
+    assertThat(value.getPurchaseId(), is(payment.getPurchaseId()));
+    assertThat(value.getUserId(), is(payment.getUserId()));
+    assertThat(value.getProductId(), is(payment.getProductId()));
+    assertThat(value.getPrice(), is(payment.getPrice()));
+    assertThat(value.getStatus().name(), is(payment.getStatus().name()));
+    assertThat(value.getCreatedAt(), is(payment.getCreatedAt()));
+  }
+
+  @Test
+  public void shouldUpdatePaymentNew() throws Exception {
+    //Given
+    final Long id = 1L;
+    final Payment payment = PaymentMother.createPayment();
+    final PaymentDTO paymentDTO = PaymentMother.createPaymentDTO();
+    final ArgumentCaptor<PaymentDTO> argumentCaptor = ArgumentCaptor.forClass(PaymentDTO.class);
+    when(this.paymentRepositoryPanache.findById(id)).thenReturn(Uni.createFrom().nullItem());
+    when(this.paymentRepositoryPanache.persistAndFlush(argumentCaptor.capture())).thenReturn(Uni.createFrom().item(paymentDTO));
+
+    //When
+    final Uni<Payment> result = this.paymentRepository.update(id, payment);
+
+    //Then
+    assertThat(result, is(notNullValue()));
+    final Payment paymentResult = result.subscribeAsCompletionStage().get();
+    assertThat(paymentResult.getId(), is(paymentDTO.getId()));
+    assertThat(paymentResult.getPurchaseId(), is(paymentDTO.getPurchaseId()));
+    assertThat(paymentResult.getUserId(), is(paymentDTO.getUserId()));
+    assertThat(paymentResult.getProductId(), is(paymentDTO.getProductId()));
+    assertThat(paymentResult.getPrice(), is(paymentDTO.getPrice()));
+    assertThat(paymentResult.getStatus().name(), is(paymentDTO.getStatus().name()));
+    assertThat(paymentResult.getCreatedAt(), is(paymentDTO.getCreatedAt()));
+    final PaymentDTO value = argumentCaptor.getValue();
+    assertThat(value.getId(), is(nullValue()));
+    assertThat(value.getPurchaseId(), is(payment.getPurchaseId()));
+    assertThat(value.getUserId(), is(payment.getUserId()));
+    assertThat(value.getProductId(), is(payment.getProductId()));
+    assertThat(value.getPrice(), is(payment.getPrice()));
+    assertThat(value.getStatus().name(), is(payment.getStatus().name()));
+    assertThat(value.getCreatedAt(), is(payment.getCreatedAt()));
+  }
+
+  @Test
+  public void shouldUpdatePaymentOld() throws Exception {
+    //Given
+    final Long id = 1L;
+    final Payment payment = PaymentMother.createPaymentNew();
+    final PaymentDTO paymentDTO = PaymentMother.createPaymentDTO();
+    final ArgumentCaptor<PaymentDTO> argumentCaptor = ArgumentCaptor.forClass(PaymentDTO.class);
+    when(this.paymentRepositoryPanache.findById(id)).thenReturn(Uni.createFrom().item(paymentDTO));
+    when(this.paymentRepositoryPanache.persistAndFlush(argumentCaptor.capture())).thenReturn(Uni.createFrom().item(paymentDTO));
+
+    //When
+    final Uni<Payment> result = this.paymentRepository.update(id, payment);
+
+    //Then
+    assertThat(result, is(notNullValue()));
+    final Payment paymentResult = result.subscribeAsCompletionStage().get();
+    assertThat(paymentResult.getId(), is(paymentDTO.getId()));
+    assertThat(paymentResult.getPurchaseId(), is(paymentDTO.getPurchaseId()));
+    assertThat(paymentResult.getUserId(), is(paymentDTO.getUserId()));
+    assertThat(paymentResult.getProductId(), is(paymentDTO.getProductId()));
+    assertThat(paymentResult.getPrice(), is(paymentDTO.getPrice()));
+    assertThat(paymentResult.getStatus().name(), is(paymentDTO.getStatus().name()));
+    assertThat(paymentResult.getCreatedAt(), is(paymentDTO.getCreatedAt()));
+    final PaymentDTO value = argumentCaptor.getValue();
     assertThat(value.getId(), is(payment.getId()));
     assertThat(value.getPurchaseId(), is(payment.getPurchaseId()));
     assertThat(value.getUserId(), is(payment.getUserId()));
@@ -107,7 +174,6 @@ class PaymentRepositoryImplTest {
     assertThat(value.getPrice(), is(payment.getPrice()));
     assertThat(value.getStatus().name(), is(payment.getStatus().name()));
     assertThat(value.getCreatedAt(), is(payment.getCreatedAt()));
-    ;
   }
 
 }

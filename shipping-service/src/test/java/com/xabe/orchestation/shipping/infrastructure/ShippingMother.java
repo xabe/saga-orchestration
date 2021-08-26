@@ -1,7 +1,9 @@
 package com.xabe.orchestation.shipping.infrastructure;
 
+import static com.xabe.orchestation.shipping.domain.entity.ShippingStatus.ACCEPTED;
+import static com.xabe.orchestation.shipping.domain.entity.ShippingStatus.CANCELED;
+
 import com.xabe.orchestation.shipping.domain.entity.Shipping;
-import com.xabe.orchestation.shipping.domain.entity.ShippingStatus;
 import com.xabe.orchestation.shipping.domain.event.ShippingCreateCommandEvent;
 import com.xabe.orchestation.shipping.domain.event.ShippingCreatedEvent;
 import com.xabe.orchestation.shipping.infrastructure.persistence.dto.ShippingDTO;
@@ -18,7 +20,18 @@ public class ShippingMother {
         .userId("2")
         .productId("3")
         .price(10L)
-        .status(ShippingStatus.ACCEPTED)
+        .status(ACCEPTED)
+        .createdAt(OffsetDateTime.MAX).build();
+  }
+
+  public static Shipping createShippingNew() {
+    return Shipping.builder()
+        .id(1L)
+        .purchaseId("222")
+        .userId("3")
+        .productId("4")
+        .price(100L)
+        .status(CANCELED)
         .createdAt(OffsetDateTime.MAX).build();
   }
 

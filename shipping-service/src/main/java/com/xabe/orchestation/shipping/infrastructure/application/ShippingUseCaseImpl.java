@@ -29,4 +29,10 @@ public class ShippingUseCaseImpl implements ShippingUseCase {
   public Uni<Shipping> create(final Shipping shipping) {
     return this.shippingRepository.create(shipping);
   }
+
+  @Override
+  @ReactiveTransactional
+  public Uni<Shipping> update(final Long id, final Shipping shipping) {
+    return this.shippingRepository.update(id, shipping);
+  }
 }

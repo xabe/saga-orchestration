@@ -10,6 +10,7 @@ public interface ShippingUseCase {
 
   Uni<Shipping> getShipping(Long id);
 
-  Uni<Shipping> create(Shipping order);
+  Uni<Shipping> create(Shipping shipping);
 
+  Uni<Shipping> update(Long id, Shipping shipping);
 }

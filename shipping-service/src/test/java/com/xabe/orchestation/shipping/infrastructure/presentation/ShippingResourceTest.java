@@ -148,4 +148,47 @@ class ShippingResourceTest {
     final Response response = result.subscribeAsCompletionStage().get();
     assertThat(response.getStatus(), is(Status.BAD_REQUEST.getStatusCode()));
   }
+
+  @Test
+  public void shouldUpdateShipping() throws Exception {
+    //Given
+    final ShippingPayload shippingPayload = ShippingPayload.builder().productId("1").userId("2").price(1L).build();
+    final Shipping shipping = Shipping.builder().productId("1").userId("2").price(1L).build();
+    final UriInfo uriInfo = mock(UriInfo.class);
+    final UriBuilder uriBuilder = new UriBuilderImpl();
+    final Long id = 1L;
+    when(this.shippingUseCase.update(id, shipping)).thenReturn(Uni.createFrom().item(shipping.toBuilder().id(1L).build()));
+    when(uriInfo.getRequestUriBuilder()).thenReturn(uriBuilder);
+
+    //When
+    final Uni<Response> result = this.shippingResource.update(id, shippingPayload, uriInfo);
+
+    //Then
+    assertThat(result, is(notNullValue()));
+    final Response response = result.subscribeAsCompletionStage().get();
+    assertThat(response.getLocation(), is(notNullValue()));
+    assertThat(response.getStatus(), is(Status.NO_CONTENT.getStatusCode()));
+    assertThat(response.getLocation(), is(notNullValue()));
+    assertThat(response.getLocation(), is(new UriBuilderImpl().build()));
+  }
+
+  @Test
+  public void shouldUpdatedShippingError() throws Exception {
+    //Given
+    final ShippingPayload shippingPayload = ShippingPayload.builder().productId("1").userId("2").price(1L).build();
+    final Shipping shipping = Shipping.builder().productId("1").userId("2").price(1L).build();
+    final UriInfo uriInfo = mock(UriInfo.class);
+    final UriBuilder uriBuilder = new UriBuilderImpl();
+    final Long id = 1L;
+    when(this.shippingUseCase.update(id, shipping)).thenReturn(Uni.createFrom().failure(RuntimeException::new));
+    when(uriInfo.getRequestUriBuilder()).thenReturn(uriBuilder);
+
+    //When
+    final Uni<Response> result = this.shippingResource.update(id, shippingPayload, uriInfo);
+
+    //Then
+    assertThat(result, is(notNullValue()));
+    final Response response = result.subscribeAsCompletionStage().get();
+    assertThat(response.getStatus(), is(Status.BAD_REQUEST.getStatusCode()));
+  }
 }

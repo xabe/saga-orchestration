@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -100,6 +101,72 @@ class ShippingRepositoryImplTest {
     assertThat(shippingResult.getStatus().name(), is(shippingDTO.getStatus().name()));
     assertThat(shippingResult.getCreatedAt(), is(shippingDTO.getCreatedAt()));
     final ShippingDTO value = argumentCaptor.getValue();
+    assertThat(value.getId(), is(nullValue()));
+    assertThat(value.getPurchaseId(), is(shipping.getPurchaseId()));
+    assertThat(value.getUserId(), is(shipping.getUserId()));
+    assertThat(value.getProductId(), is(shipping.getProductId()));
+    assertThat(value.getPrice(), is(shipping.getPrice()));
+    assertThat(value.getStatus().name(), is(shipping.getStatus().name()));
+    assertThat(value.getCreatedAt(), is(shipping.getCreatedAt()));
+  }
+
+  @Test
+  public void shouldUpdateShippingNew() throws Exception {
+    //Given
+    final Long id = 1L;
+    final Shipping shipping = ShippingMother.createShipping();
+    final ShippingDTO shippingDTO = ShippingMother.createShippingDTO();
+    final ArgumentCaptor<ShippingDTO> argumentCaptor = ArgumentCaptor.forClass(ShippingDTO.class);
+    when(this.shippingRepositoryPanache.findById(id)).thenReturn(Uni.createFrom().nullItem());
+    when(this.shippingRepositoryPanache.persistAndFlush(argumentCaptor.capture())).thenReturn(Uni.createFrom().item(shippingDTO));
+
+    //When
+    final Uni<Shipping> result = this.shippingRepository.update(id, shipping);
+
+    //Then
+    assertThat(result, is(notNullValue()));
+    final Shipping shippingResult = result.subscribeAsCompletionStage().get();
+    assertThat(shippingResult.getId(), is(shippingDTO.getId()));
+    assertThat(shippingResult.getPurchaseId(), is(shippingDTO.getPurchaseId()));
+    assertThat(shippingResult.getUserId(), is(shippingDTO.getUserId()));
+    assertThat(shippingResult.getProductId(), is(shippingDTO.getProductId()));
+    assertThat(shippingResult.getPrice(), is(shippingDTO.getPrice()));
+    assertThat(shippingResult.getStatus().name(), is(shippingDTO.getStatus().name()));
+    assertThat(shippingResult.getCreatedAt(), is(shippingDTO.getCreatedAt()));
+    final ShippingDTO value = argumentCaptor.getValue();
+    assertThat(value.getId(), is(nullValue()));
+    assertThat(value.getPurchaseId(), is(shipping.getPurchaseId()));
+    assertThat(value.getUserId(), is(shipping.getUserId()));
+    assertThat(value.getProductId(), is(shipping.getProductId()));
+    assertThat(value.getPrice(), is(shipping.getPrice()));
+    assertThat(value.getStatus().name(), is(shipping.getStatus().name()));
+    assertThat(value.getCreatedAt(), is(shipping.getCreatedAt()));
+  }
+
+  @Test
+  public void shouldUpdateShippingOld() throws Exception {
+    //Given
+    final Long id = 1L;
+    final Shipping shipping = ShippingMother.createShippingNew();
+    final ShippingDTO shippingDTO = ShippingMother.createShippingDTO();
+    final ArgumentCaptor<ShippingDTO> argumentCaptor = ArgumentCaptor.forClass(ShippingDTO.class);
+    when(this.shippingRepositoryPanache.findById(id)).thenReturn(Uni.createFrom().item(shippingDTO));
+    when(this.shippingRepositoryPanache.persistAndFlush(argumentCaptor.capture())).thenReturn(Uni.createFrom().item(shippingDTO));
+
+    //When
+    final Uni<Shipping> result = this.shippingRepository.update(id, shipping);
+
+    //Then
+    assertThat(result, is(notNullValue()));
+    final Shipping shippingResult = result.subscribeAsCompletionStage().get();
+    assertThat(shippingResult.getId(), is(shippingDTO.getId()));
+    assertThat(shippingResult.getPurchaseId(), is(shippingDTO.getPurchaseId()));
+    assertThat(shippingResult.getUserId(), is(shippingDTO.getUserId()));
+    assertThat(shippingResult.getProductId(), is(shippingDTO.getProductId()));
+    assertThat(shippingResult.getPrice(), is(shippingDTO.getPrice()));
+    assertThat(shippingResult.getStatus().name(), is(shippingDTO.getStatus().name()));
+    assertThat(shippingResult.getCreatedAt(), is(shippingDTO.getCreatedAt()));
+    final ShippingDTO value = argumentCaptor.getValue();
     assertThat(value.getId(), is(shipping.getId()));
     assertThat(value.getPurchaseId(), is(shipping.getPurchaseId()));
     assertThat(value.getUserId(), is(shipping.getUserId()));
@@ -107,7 +174,6 @@ class ShippingRepositoryImplTest {
     assertThat(value.getPrice(), is(shipping.getPrice()));
     assertThat(value.getStatus().name(), is(shipping.getStatus().name()));
     assertThat(value.getCreatedAt(), is(shipping.getCreatedAt()));
-    ;
   }
 
 }

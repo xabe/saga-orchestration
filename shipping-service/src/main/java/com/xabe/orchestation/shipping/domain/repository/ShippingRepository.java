@@ -11,4 +11,6 @@ public interface ShippingRepository {
   Uni<List<Shipping>> getShipments();
 
   Uni<Shipping> create(Shipping order);
+
+  Uni<Shipping> update(Long id, Shipping shipping);
 }

@@ -12,4 +12,5 @@ public interface PaymentUseCase {
 
   Uni<Payment> create(Payment payment);
 
+  Uni<Payment> update(Long id, Payment payment);
 }

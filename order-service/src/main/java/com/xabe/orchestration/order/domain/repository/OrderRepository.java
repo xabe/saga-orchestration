@@ -11,4 +11,6 @@ public interface OrderRepository {
   Uni<List<Order>> getOrders();
 
   Uni<Order> create(Order order);
+
+  Uni<Order> update(Long id, Order order);
 }

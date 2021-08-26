@@ -1,7 +1,9 @@
 package com.xabe.orchestation.payment.infrastructure;
 
+import static com.xabe.orchestation.payment.domain.entity.PaymentStatus.ACCEPTED;
+import static com.xabe.orchestation.payment.domain.entity.PaymentStatus.CANCELED;
+
 import com.xabe.orchestation.payment.domain.entity.Payment;
-import com.xabe.orchestation.payment.domain.entity.PaymentStatus;
 import com.xabe.orchestation.payment.domain.event.PaymentCreateCommandEvent;
 import com.xabe.orchestation.payment.domain.event.PaymentCreatedEvent;
 import com.xabe.orchestation.payment.infrastructure.persistence.dto.PaymentDTO;
@@ -18,7 +20,18 @@ public class PaymentMother {
         .userId("2")
         .productId("3")
         .price(10L)
-        .status(PaymentStatus.ACCEPTED)
+        .status(ACCEPTED)
+        .createdAt(OffsetDateTime.MAX).build();
+  }
+
+  public static Payment createPaymentNew() {
+    return Payment.builder()
+        .id(1L)
+        .purchaseId("222")
+        .userId("3")
+        .productId("4")
+        .price(100L)
+        .status(CANCELED)
         .createdAt(OffsetDateTime.MAX).build();
   }
 

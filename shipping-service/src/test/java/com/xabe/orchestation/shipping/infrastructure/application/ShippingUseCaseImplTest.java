@@ -70,4 +70,19 @@ class ShippingUseCaseImplTest {
     assertThat(result, is(notNullValue()));
     assertThat(result.subscribeAsCompletionStage().get(), is(notNullValue()));
   }
+
+  @Test
+  public void shouldUpdateShipping() throws Exception {
+    //Given
+    final Shipping shipping = Shipping.builder().build();
+    final Long id = 1L;
+    when(this.shippingRepository.update(id, shipping)).thenReturn(Uni.createFrom().item(shipping));
+
+    //When
+    final Uni<Shipping> result = this.shippingUseCase.update(id, shipping);
+
+    //Then
+    assertThat(result, is(notNullValue()));
+    assertThat(result.subscribeAsCompletionStage().get(), is(notNullValue()));
+  }
 }

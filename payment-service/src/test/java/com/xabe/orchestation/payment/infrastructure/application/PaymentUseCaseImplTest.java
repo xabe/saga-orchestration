@@ -70,4 +70,19 @@ class PaymentUseCaseImplTest {
     assertThat(result, is(notNullValue()));
     assertThat(result.subscribeAsCompletionStage().get(), is(notNullValue()));
   }
+
+  @Test
+  public void shouldUpdatePayment() throws Exception {
+    //Given
+    final Payment payment = Payment.builder().build();
+    final Long id = 1L;
+    when(this.paymentRepository.update(id, payment)).thenReturn(Uni.createFrom().item(payment));
+
+    //When
+    final Uni<Payment> result = this.paymentUseCase.update(id, payment);
+
+    //Then
+    assertThat(result, is(notNullValue()));
+    assertThat(result.subscribeAsCompletionStage().get(), is(notNullValue()));
+  }
 }

@@ -13,6 +13,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -56,4 +57,12 @@ public class ShippingResource {
     return shipping -> Response.created(uriInfo.getRequestUriBuilder().path(shipping.getId().toString()).build()).build();
   }
 
+  @Path("/{id}")
+  @PUT
+  public Uni<Response> update(@PathParam("id") final Long id, @Valid final ShippingPayload shippingPayload,
+      @Context final UriInfo uriInfo) {
+    return this.shippingUseCase.update(id, this.presentationMapper.toEntity(shippingPayload))
+        .map(order -> Response.noContent().location(uriInfo.getRequestUriBuilder().build()).build())
+        .onFailure().recoverWithItem(() -> Response.status(Response.Status.BAD_REQUEST).build());
+  }
 }

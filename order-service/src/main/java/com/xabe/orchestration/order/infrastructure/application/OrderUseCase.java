@@ -12,4 +12,5 @@ public interface OrderUseCase {
 
   Uni<Order> create(Order order);
 
+  Uni<Order> update(Long id, Order order);
 }
