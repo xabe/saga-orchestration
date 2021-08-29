@@ -4,6 +4,8 @@ import static com.xabe.orchestration.order.domain.entity.OrderStatus.CANCELED;
 import static com.xabe.orchestration.order.domain.entity.OrderStatus.CREATED;
 
 import com.xabe.orchestration.order.domain.entity.Order;
+import com.xabe.orchestration.order.domain.event.OrderCancelCommandEvent;
+import com.xabe.orchestration.order.domain.event.OrderCanceledEvent;
 import com.xabe.orchestration.order.domain.event.OrderCreateCommandEvent;
 import com.xabe.orchestration.order.domain.event.OrderCreatedEvent;
 import com.xabe.orchestration.order.infrastructure.persistence.dto.OrderDTO;
@@ -54,6 +56,19 @@ public class OrderMother {
         .productId("3")
         .price(10L)
         .status("CREATED")
+        .operationStatus("SUCCESS")
+        .createdAt(Instant.MAX).build();
+  }
+
+  public static OrderCanceledEvent createOrderCanceledEvent() {
+    return OrderCanceledEvent.builder()
+        .id(1L)
+        .purchaseId("1111")
+        .userId("2")
+        .productId("3")
+        .price(10L)
+        .status("CREATED")
+        .operationStatus("ERROR")
         .createdAt(Instant.MAX).build();
   }
 
@@ -63,6 +78,16 @@ public class OrderMother {
         .userId("2")
         .productId("3")
         .price(1L)
+        .sentAt(Instant.now())
+        .build();
+  }
+
+  public static OrderCancelCommandEvent createOrderCancelCommandEvent() {
+    return OrderCancelCommandEvent.builder()
+        .orderId(1L)
+        .purchaseId("1111")
+        .userId("2")
+        .productId("3")
         .sentAt(Instant.now())
         .build();
   }

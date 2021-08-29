@@ -32,4 +32,6 @@ public class OrderCreatedEvent implements Event {
 
   String status;
 
+  String operationStatus;
+
 }

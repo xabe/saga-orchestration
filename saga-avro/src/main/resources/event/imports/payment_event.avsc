@@ -1,5 +1,14 @@
 [
   {
+    "name": "PaymentOperationStatus",
+    "namespace": "com.xabe.avro.v1",
+    "type": "enum",
+    "symbols": [
+      "SUCCESS",
+      "ERROR"
+    ]
+  },
+  {
     "name": "Payment",
     "namespace": "com.xabe.avro.v1",
     "type": "record",
@@ -57,6 +66,10 @@
         "type": "Payment"
       },
       {
+        "name": "operation_status",
+        "type": "PaymentOperationStatus"
+      },
+      {
         "name": "updated_at",
         "type": [
           "null",
@@ -76,6 +89,10 @@
       {
         "name": "payment",
         "type": "Payment"
+      },
+      {
+        "name": "operation_status",
+        "type": "PaymentOperationStatus"
       },
       {
         "name": "updated_at",

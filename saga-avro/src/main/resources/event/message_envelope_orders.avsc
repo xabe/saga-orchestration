@@ -14,7 +14,7 @@
       "doc": "Envelope's content. It could be any Order command.",
       "type": [
         "OrderCreateCommand",
-        "OrderCanceledCommand"
+        "OrderCancelCommand"
       ]
     }
   ]

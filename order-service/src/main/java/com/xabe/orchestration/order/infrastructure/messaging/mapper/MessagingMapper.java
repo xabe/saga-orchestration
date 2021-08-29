@@ -1,7 +1,10 @@
 package com.xabe.orchestration.order.infrastructure.messaging.mapper;
 
+import com.xabe.avro.v1.OrderCancelCommand;
 import com.xabe.avro.v1.OrderCreateCommand;
 import com.xabe.orchestration.order.domain.entity.Order;
+import com.xabe.orchestration.order.domain.event.OrderCancelCommandEvent;
+import com.xabe.orchestration.order.domain.event.OrderCanceledEvent;
 import com.xabe.orchestration.order.domain.event.OrderCreateCommandEvent;
 import com.xabe.orchestration.order.domain.event.OrderCreatedEvent;
 import java.time.Instant;
@@ -18,14 +21,26 @@ import org.mapstruct.NullValueCheckStrategy;
     nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS, componentModel = "cdi")
 public interface MessagingMapper {
 
-  OrderCreateCommandEvent toAvroCommandEvent(OrderCreateCommand orderCreateCommand);
+  OrderCreateCommandEvent toAvroCreateCommandEvent(OrderCreateCommand orderCreateCommand);
+
+  OrderCancelCommandEvent toAvroCancelCommandEvent(OrderCancelCommand orderCancelCommand);
 
   @Mapping(source = "sentAt", target = "createdAt")
-  Order toEntity(OrderCreateCommandEvent paymentCreateCommandEvent);
+  @Mapping(target = "status", expression = "java(com.xabe.orchestration.order.domain.entity.OrderStatus.CREATED)")
+  Order toEntity(OrderCreateCommandEvent orderCreateCommandEvent);
 
-  OrderCreatedEvent toEvent(Order order);
+  @Mapping(source = "orderId", target = "id")
+  @Mapping(source = "sentAt", target = "createdAt")
+  @Mapping(target = "status", expression = "java(com.xabe.orchestration.order.domain.entity.OrderStatus.CANCELED)")
+  Order toEntity(OrderCancelCommandEvent orderCancelCommandEvent);
+
+  OrderCreatedEvent toCreatedEvent(Order order, String operationStatus);
+
+  OrderCanceledEvent toCanceledEvent(Order order, String operationStatus);
 
   com.xabe.avro.v1.Order toAvroEvent(OrderCreatedEvent orderCreatedEvent);
+
+  com.xabe.avro.v1.Order toAvroEvent(OrderCanceledEvent orderCanceledEvent);
 
   default Instant map(final OffsetDateTime value) {
     return Objects.isNull(value) ? Instant.now() : value.toInstant();

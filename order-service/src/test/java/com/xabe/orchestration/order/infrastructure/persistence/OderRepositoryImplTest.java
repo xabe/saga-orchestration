@@ -50,7 +50,7 @@ class OderRepositoryImplTest {
     assertThat(order.getPurchaseId(), is(orderDTO.getPurchaseId()));
     assertThat(order.getUserId(), is(orderDTO.getUserId()));
     assertThat(order.getProductId(), is(orderDTO.getProductId()));
-    assertThat(order.getPrice(), is(orderDTO.getPrice()));
+    assertThat(order.getPrice(), is(orderDTO.getPrice().get()));
     assertThat(order.getStatus().name(), is(orderDTO.getStatus().name()));
     assertThat(order.getCreatedAt(), is(orderDTO.getCreatedAt()));
   }
@@ -74,7 +74,7 @@ class OderRepositoryImplTest {
     assertThat(order.getPurchaseId(), is(orderDTO.getPurchaseId()));
     assertThat(order.getUserId(), is(orderDTO.getUserId()));
     assertThat(order.getProductId(), is(orderDTO.getProductId()));
-    assertThat(order.getPrice(), is(orderDTO.getPrice()));
+    assertThat(order.getPrice(), is(orderDTO.getPrice().get()));
     assertThat(order.getStatus().name(), is(orderDTO.getStatus().name()));
     assertThat(order.getCreatedAt(), is(orderDTO.getCreatedAt()));
   }
@@ -97,7 +97,7 @@ class OderRepositoryImplTest {
     assertThat(orderResult.getPurchaseId(), is(orderDTO.getPurchaseId()));
     assertThat(orderResult.getUserId(), is(orderDTO.getUserId()));
     assertThat(orderResult.getProductId(), is(orderDTO.getProductId()));
-    assertThat(orderResult.getPrice(), is(orderDTO.getPrice()));
+    assertThat(orderResult.getPrice(), is(orderDTO.getPrice().get()));
     assertThat(orderResult.getStatus().name(), is(orderDTO.getStatus().name()));
     assertThat(orderResult.getCreatedAt(), is(orderDTO.getCreatedAt()));
     final OrderDTO value = argumentCaptor.getValue();
@@ -105,7 +105,7 @@ class OderRepositoryImplTest {
     assertThat(value.getPurchaseId(), is(order.getPurchaseId()));
     assertThat(value.getUserId(), is(order.getUserId()));
     assertThat(value.getProductId(), is(order.getProductId()));
-    assertThat(value.getPrice(), is(order.getPrice()));
+    assertThat(value.getPrice().get(), is(order.getPrice()));
     assertThat(value.getStatus().name(), is(order.getStatus().name()));
     assertThat(value.getCreatedAt(), is(order.getCreatedAt()));
   }
@@ -130,7 +130,7 @@ class OderRepositoryImplTest {
     assertThat(orderResult.getPurchaseId(), is(orderDTO.getPurchaseId()));
     assertThat(orderResult.getUserId(), is(orderDTO.getUserId()));
     assertThat(orderResult.getProductId(), is(orderDTO.getProductId()));
-    assertThat(orderResult.getPrice(), is(orderDTO.getPrice()));
+    assertThat(orderResult.getPrice(), is(orderDTO.getPrice().get()));
     assertThat(orderResult.getStatus().name(), is(orderDTO.getStatus().name()));
     assertThat(orderResult.getCreatedAt(), is(orderDTO.getCreatedAt()));
     final OrderDTO value = argumentCaptor.getValue();
@@ -138,7 +138,7 @@ class OderRepositoryImplTest {
     assertThat(value.getPurchaseId(), is(order.getPurchaseId()));
     assertThat(value.getUserId(), is(order.getUserId()));
     assertThat(value.getProductId(), is(order.getProductId()));
-    assertThat(value.getPrice(), is(order.getPrice()));
+    assertThat(value.getPrice().get(), is(order.getPrice()));
     assertThat(value.getStatus().name(), is(order.getStatus().name()));
     assertThat(value.getCreatedAt(), is(order.getCreatedAt()));
   }
@@ -163,7 +163,7 @@ class OderRepositoryImplTest {
     assertThat(orderResult.getPurchaseId(), is(orderDTO.getPurchaseId()));
     assertThat(orderResult.getUserId(), is(orderDTO.getUserId()));
     assertThat(orderResult.getProductId(), is(orderDTO.getProductId()));
-    assertThat(orderResult.getPrice(), is(orderDTO.getPrice()));
+    assertThat(orderResult.getPrice(), is(orderDTO.getPrice().get()));
     assertThat(orderResult.getStatus().name(), is(orderDTO.getStatus().name()));
     assertThat(orderResult.getCreatedAt(), is(orderDTO.getCreatedAt()));
     final OrderDTO value = argumentCaptor.getValue();
@@ -171,7 +171,7 @@ class OderRepositoryImplTest {
     assertThat(value.getPurchaseId(), is(order.getPurchaseId()));
     assertThat(value.getUserId(), is(order.getUserId()));
     assertThat(value.getProductId(), is(order.getProductId()));
-    assertThat(value.getPrice(), is(order.getPrice()));
+    assertThat(value.getPrice().get(), is(order.getPrice()));
     assertThat(value.getStatus().name(), is(order.getStatus().name()));
     assertThat(value.getCreatedAt(), is(order.getCreatedAt()));
   }

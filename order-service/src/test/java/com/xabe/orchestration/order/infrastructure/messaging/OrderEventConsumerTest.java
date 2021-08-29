@@ -17,6 +17,8 @@ import com.xabe.orchestation.common.infrastructure.Event;
 import com.xabe.orchestation.common.infrastructure.event.EventConsumer;
 import com.xabe.orchestation.common.infrastructure.event.EventPublisher;
 import com.xabe.orchestration.order.domain.entity.Order;
+import com.xabe.orchestration.order.domain.event.OrderCancelCommandEvent;
+import com.xabe.orchestration.order.domain.event.OrderCanceledEvent;
 import com.xabe.orchestration.order.domain.event.OrderCreateCommandEvent;
 import com.xabe.orchestration.order.domain.event.OrderCreatedEvent;
 import com.xabe.orchestration.order.domain.repository.OrderRepository;
@@ -61,7 +63,7 @@ class OrderEventConsumerTest {
   }
 
   @Test
-  public void givenAEventValidWhenInvokeTryPublishThenSendEvent() throws Exception {
+  public void givenAEventValidCreateWhenInvokeTryPublishThenSendEvent() throws Exception {
     //Given
     final OrderCreateCommandEvent event = OrderMother.createOrderCreateCommandEvent();
     final ArgumentCaptor<OrderCreatedEvent> argumentCaptor = ArgumentCaptor.forClass(OrderCreatedEvent.class);
@@ -84,10 +86,11 @@ class OrderEventConsumerTest {
     assertThat(result.getCreatedAt(), is(event.getSentAt()));
     assertThat(result.getPrice(), is(event.getPrice()));
     assertThat(result.getStatus(), is("CREATED"));
+    assertThat(result.getOperationStatus(), is("SUCCESS"));
   }
 
   @Test
-  public void givenAEventValidWhenInvokeTryPublishThenSendEventError() throws Exception {
+  public void givenAEventValidCreateWhenInvokeTryPublishThenSendEventError() throws Exception {
     //Given
     final OrderCreateCommandEvent event = OrderMother.createOrderCreateCommandEvent();
     final ArgumentCaptor<OrderCreatedEvent> argumentCaptor = ArgumentCaptor.forClass(OrderCreatedEvent.class);
@@ -106,7 +109,59 @@ class OrderEventConsumerTest {
     assertThat(result.getProductId(), is(event.getProductId()));
     assertThat(result.getCreatedAt(), is(event.getSentAt()));
     assertThat(result.getPrice(), is(event.getPrice()));
+    assertThat(result.getStatus(), is("CREATED"));
+    assertThat(result.getOperationStatus(), is("ERROR"));
+  }
+
+  @Test
+  public void givenAEventValidCanceledWhenInvokeTryPublishThenSendEvent() throws Exception {
+    //Given
+    final OrderCancelCommandEvent event = OrderMother.createOrderCancelCommandEvent();
+    final ArgumentCaptor<OrderCanceledEvent> argumentCaptor = ArgumentCaptor.forClass(OrderCanceledEvent.class);
+    doAnswer(invocationOnMock -> {
+      final Order order = Order.class.cast(invocationOnMock.getArguments()[1]).toBuilder().id(1L).price(10L).build();
+      return Uni.createFrom().item(order);
+    }).when(this.orderRepository).update(any(), any());
+
+    //When
+    this.eventConsumer.consume(event);
+
+    //Then
+    verify(this.eventPublisher).tryPublish(argumentCaptor.capture());
+    final OrderCanceledEvent result = argumentCaptor.getValue();
+    assertThat(result, is(notNullValue()));
+    assertThat(result.getId(), is(1L));
+    assertThat(result.getPurchaseId(), is(event.getPurchaseId()));
+    assertThat(result.getUserId(), is(event.getUserId()));
+    assertThat(result.getProductId(), is(event.getProductId()));
+    assertThat(result.getCreatedAt(), is(event.getSentAt()));
+    assertThat(result.getPrice(), is(10L));
     assertThat(result.getStatus(), is("CANCELED"));
+    assertThat(result.getOperationStatus(), is("SUCCESS"));
+  }
+
+  @Test
+  public void givenAEventValidCancelWhenInvokeTryPublishThenSendEventError() throws Exception {
+    //Given
+    final OrderCancelCommandEvent event = OrderMother.createOrderCancelCommandEvent();
+    final ArgumentCaptor<OrderCanceledEvent> argumentCaptor = ArgumentCaptor.forClass(OrderCanceledEvent.class);
+    when(this.orderRepository.update(any(), any())).thenReturn(Uni.createFrom().failure(new RuntimeException()));
+
+    //When
+    this.eventConsumer.consume(event);
+
+    //Then
+    verify(this.eventPublisher).tryPublish(argumentCaptor.capture());
+    final OrderCanceledEvent result = argumentCaptor.getValue();
+    assertThat(result, is(notNullValue()));
+    assertThat(result.getId(), is(event.getOrderId()));
+    assertThat(result.getPurchaseId(), is(event.getPurchaseId()));
+    assertThat(result.getUserId(), is(event.getUserId()));
+    assertThat(result.getProductId(), is(event.getProductId()));
+    assertThat(result.getCreatedAt(), is(event.getSentAt()));
+    assertThat(result.getPrice(), is(nullValue()));
+    assertThat(result.getStatus(), is("CANCELED"));
+    assertThat(result.getOperationStatus(), is("ERROR"));
   }
 
 }

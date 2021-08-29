@@ -2,6 +2,7 @@ package com.xabe.orchestration.order.infrastructure.persistence.dto;
 
 import java.io.Serializable;
 import java.time.OffsetDateTime;
+import java.util.Optional;
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -50,4 +51,8 @@ public class OrderDTO implements Serializable {
 
   @UpdateTimestamp
   public OffsetDateTime updatedAt;
+
+  public Optional<Long> getPrice() {
+    return Optional.ofNullable(this.price);
+  }
 }

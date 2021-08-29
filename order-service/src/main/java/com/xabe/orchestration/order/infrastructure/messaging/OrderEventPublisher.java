@@ -3,8 +3,10 @@ package com.xabe.orchestration.order.infrastructure.messaging;
 import com.xabe.avro.v1.MessageEnvelopeStatus;
 import com.xabe.avro.v1.Metadata;
 import com.xabe.avro.v1.Order;
+import com.xabe.avro.v1.OrderOperationStatus;
 import com.xabe.orchestation.common.infrastructure.Event;
 import com.xabe.orchestation.common.infrastructure.event.EventPublisher;
+import com.xabe.orchestration.order.domain.event.OrderCanceledEvent;
 import com.xabe.orchestration.order.domain.event.OrderCreatedEvent;
 import com.xabe.orchestration.order.infrastructure.messaging.mapper.MessagingMapper;
 import io.smallrye.reactive.messaging.kafka.api.OutgoingKafkaRecordMetadata;
@@ -43,7 +45,7 @@ public class OrderEventPublisher implements EventPublisher {
     this.logger = logger;
     this.messagingMapper = messagingMapper;
     this.statusEmitter = statusEmitter;
-    this.mapHandlerEvent = Map.of(OrderCreatedEvent.class, this::orderCreatedEvent);
+    this.mapHandlerEvent = Map.of(OrderCreatedEvent.class, this::orderCreatedEvent, OrderCanceledEvent.class, this::orderCanceledEvent);
   }
 
   @Override
@@ -61,11 +63,26 @@ public class OrderEventPublisher implements EventPublisher {
     final com.xabe.avro.v1.OrderCreatedEvent createdEvent = com.xabe.avro.v1.OrderCreatedEvent.newBuilder()
         .setOrder(order)
         .setUpdatedAt(Instant.now())
+        .setOperationStatus(OrderOperationStatus.valueOf(orderCreatedEvent.getOperationStatus()))
         .build();
     final MessageEnvelopeStatus messageEnvelopeStatus =
         MessageEnvelopeStatus.newBuilder().setMetadata(this.createMetaData()).setPayload(createdEvent).build();
     this.statusEmitter.send(Message.of(messageEnvelopeStatus, this.createMetaDataKafka(orderCreatedEvent.getId().toString())));
-    this.logger.info("Send Event {}", messageEnvelopeStatus);
+    this.logger.info("Send Event OrderCreatedEvent {}", messageEnvelopeStatus);
+  }
+
+  private void orderCanceledEvent(final Event event) {
+    final OrderCanceledEvent orderCanceledEvent = OrderCanceledEvent.class.cast(event);
+    final Order order = this.messagingMapper.toAvroEvent(orderCanceledEvent);
+    final com.xabe.avro.v1.OrderCanceledEvent canceledEvent = com.xabe.avro.v1.OrderCanceledEvent.newBuilder()
+        .setOrder(order)
+        .setUpdatedAt(Instant.now())
+        .setOperationStatus(OrderOperationStatus.valueOf(orderCanceledEvent.getOperationStatus()))
+        .build();
+    final MessageEnvelopeStatus messageEnvelopeStatus =
+        MessageEnvelopeStatus.newBuilder().setMetadata(this.createMetaData()).setPayload(canceledEvent).build();
+    this.statusEmitter.send(Message.of(messageEnvelopeStatus, this.createMetaDataKafka(orderCanceledEvent.getId().toString())));
+    this.logger.info("Send Event OrderCanceledEvent {}", messageEnvelopeStatus);
   }
 
   private Metadata createMetaData() {

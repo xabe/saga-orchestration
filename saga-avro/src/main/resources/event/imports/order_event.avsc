@@ -1,5 +1,14 @@
 [
   {
+    "name": "OrderOperationStatus",
+    "namespace": "com.xabe.avro.v1",
+    "type": "enum",
+    "symbols": [
+      "SUCCESS",
+      "ERROR"
+    ]
+  },
+  {
     "name": "Order",
     "namespace": "com.xabe.avro.v1",
     "type": "record",
@@ -57,6 +66,10 @@
         "type": "Order"
       },
       {
+        "name": "operation_status",
+        "type": "OrderOperationStatus"
+      },
+      {
         "name": "updated_at",
         "type": [
           "null",
@@ -76,6 +89,10 @@
       {
         "name": "order",
         "type": "Order"
+      },
+      {
+        "name": "operation_status",
+        "type": "OrderOperationStatus"
       },
       {
         "name": "updated_at",
@@ -123,7 +140,7 @@
     ]
   },
   {
-    "name": "OrderCanceledCommand",
+    "name": "OrderCancelCommand",
     "namespace": "com.xabe.avro.v1",
     "type": "record",
     "fields": [

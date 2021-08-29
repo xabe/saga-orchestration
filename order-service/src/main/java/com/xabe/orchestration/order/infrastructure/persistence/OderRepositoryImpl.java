@@ -52,7 +52,7 @@ class OderRepositoryImpl implements OrderRepository {
         this.logger.debug("Update: create Order with id {} {}", id, newOrderDTO);
         return this.orderRepositoryPanache.persistAndFlush(newOrderDTO);
       } else {
-        orderDTO.setPrice(newOrderDTO.getPrice());
+        newOrderDTO.getPrice().ifPresent(orderDTO::setPrice);
         orderDTO.setStatus(newOrderDTO.getStatus());
         orderDTO.setProductId(newOrderDTO.getProductId());
         orderDTO.setPurchaseId(newOrderDTO.getPurchaseId());
