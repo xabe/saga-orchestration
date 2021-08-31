@@ -1,4 +1,4 @@
-package com.xabe.orchestration.order.domain.entity;
+package com.xabe.orchestration.orchestrator.domain.entity;
 
 import com.xabe.orchestation.common.infrastructure.Entity;
 import java.time.OffsetDateTime;
@@ -20,8 +20,6 @@ public class Order implements Entity<Long> {
 
   Long id;
 
-  String purchaseId;
-
   String userId;
 
   String productId;
@@ -29,7 +27,7 @@ public class Order implements Entity<Long> {
   Long price;
 
   @Builder.Default
-  OrderStatus status = OrderStatus.CREATED;
+  OrderStatus status = OrderStatus.UNKNOWN;
 
   OffsetDateTime createdAt;
 }

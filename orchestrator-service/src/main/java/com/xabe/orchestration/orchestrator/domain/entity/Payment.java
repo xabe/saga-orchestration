@@ -1,4 +1,4 @@
-package com.xabe.orchestration.order.domain.entity;
+package com.xabe.orchestration.orchestrator.domain.entity;
 
 import com.xabe.orchestation.common.infrastructure.Entity;
 import java.time.OffsetDateTime;
@@ -16,11 +16,9 @@ import lombok.Value;
 @ToString
 @NoArgsConstructor(force = true, access = AccessLevel.PUBLIC)
 @AllArgsConstructor
-public class Order implements Entity<Long> {
+public class Payment implements Entity<Long> {
 
   Long id;
-
-  String purchaseId;
 
   String userId;
 
@@ -29,7 +27,7 @@ public class Order implements Entity<Long> {
   Long price;
 
   @Builder.Default
-  OrderStatus status = OrderStatus.CREATED;
+  PaymentStatus status = PaymentStatus.UNKNOWN;
 
   OffsetDateTime createdAt;
 }

@@ -8,6 +8,7 @@
   <artifactId>saga</artifactId>
   <version>1.0-SNAPSHOT</version>
   <modules>
+    <module>orchestrator-service</module>
     <module>order-service</module>
     <module>payment-service</module>
     <module>shipping-service</module>

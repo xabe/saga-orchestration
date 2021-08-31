@@ -1,7 +1,7 @@
-package com.xabe.orchestration.order.domain.entity;
+package com.xabe.orchestration.orchestrator.domain.event;
 
-import com.xabe.orchestation.common.infrastructure.Entity;
-import java.time.OffsetDateTime;
+import com.xabe.orchestation.common.infrastructure.Event;
+import java.time.Instant;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,9 +16,7 @@ import lombok.Value;
 @ToString
 @NoArgsConstructor(force = true, access = AccessLevel.PUBLIC)
 @AllArgsConstructor
-public class Order implements Entity<Long> {
-
-  Long id;
+public class OrderCreateCommandEvent implements Event {
 
   String purchaseId;
 
@@ -28,8 +26,6 @@ public class Order implements Entity<Long> {
 
   Long price;
 
-  @Builder.Default
-  OrderStatus status = OrderStatus.CREATED;
+  Instant sentAt;
 
-  OffsetDateTime createdAt;
 }

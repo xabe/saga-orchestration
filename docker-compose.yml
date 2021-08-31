@@ -15,6 +15,11 @@ services:
       - 8081-8083:8081-8083       # REST Proxy, Schema Registry, Kafka Connect ports
       - 9581-9585:9581-9585       # JMX Ports
       - 9092:9092                 # Kafka Broker
+  mongo-orchestrator:
+    image: mongo:4.0
+    restart: always
+    ports:
+      - "27017:27017"
   postgres-order:
     image: postgres
     restart: always

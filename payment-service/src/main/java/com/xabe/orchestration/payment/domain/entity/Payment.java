@@ -1,6 +1,6 @@
 package com.xabe.orchestration.payment.domain.entity;
 
-import com.xabe.orchestation.common.infrastructure.AggregateRoot;
+import com.xabe.orchestation.common.infrastructure.Entity;
 import java.time.OffsetDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -16,7 +16,7 @@ import lombok.Value;
 @ToString
 @NoArgsConstructor(force = true, access = AccessLevel.PUBLIC)
 @AllArgsConstructor
-public class Payment implements AggregateRoot<Long> {
+public class Payment implements Entity<Long> {
 
   Long id;
 

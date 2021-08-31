@@ -1,0 +1,54 @@
+# Configuration file
+# key = value
+
+quarkus:
+  mongodb:
+    database: saga
+    connection-string: mongodb://localhost:27017
+    devservices:
+      enabled: false
+  kafka:
+    devservices:
+      enabled: false
+  test:
+    native-image-profile: test
+  vertx:
+    prefer-native-transport: true
+  native:
+    additional-build-args:
+      - "-H:+PrintClassInitialization"
+      - "-H:+ReportExceptionStackTraces"
+      - "-H:GenerateDebugInfo=1"
+      - "-H:+StackTrace"
+      - "-H:ResourceConfigurationFiles=resources-config.json"
+      - "-H:ReflectionConfigurationFiles=reflection-config.json"
+  package:
+    main-class: com.xabe.orchestration.orchestrator.App
+  log:
+    console:
+      enable: true
+      level: DEBUG
+    category:
+      io.quarkus:
+        level: INFO
+      org.jboss.resteasy:
+        level: INFO
+      io.smallrye.reactive.messaging.kafka:
+        level: DEBUG
+      com.xabe:
+        level: DEBUG
+      io.quarkus.mongodb.panache:
+        level: DEBUG
+  application:
+    name: orchestrator-service
+  banner:
+    enabled: false
+  http:
+    test-port: 8000
+    port: 8000
+    root-path: /api
+  hibernate-orm:
+    database:
+      generation: drop-and-create
+    log:
+      sql: true
