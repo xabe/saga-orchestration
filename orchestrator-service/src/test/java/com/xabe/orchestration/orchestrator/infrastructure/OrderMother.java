@@ -1,13 +1,16 @@
 package com.xabe.orchestration.orchestrator.infrastructure;
 
-import com.xabe.orchestration.orchestrator.domain.entity.Order;
 import com.xabe.orchestration.orchestrator.domain.entity.OrderAggregate;
 import com.xabe.orchestration.orchestrator.domain.entity.OrderAggregateStatus;
-import com.xabe.orchestration.orchestrator.domain.entity.OrderStatus;
-import com.xabe.orchestration.orchestrator.domain.entity.Payment;
-import com.xabe.orchestration.orchestrator.domain.entity.PaymentStatus;
-import com.xabe.orchestration.orchestrator.domain.entity.Shipping;
-import com.xabe.orchestration.orchestrator.domain.entity.ShippingStatus;
+import com.xabe.orchestration.orchestrator.domain.entity.order.Order;
+import com.xabe.orchestration.orchestrator.domain.entity.order.OrderStatus;
+import com.xabe.orchestration.orchestrator.domain.entity.payment.Payment;
+import com.xabe.orchestration.orchestrator.domain.entity.payment.PaymentStatus;
+import com.xabe.orchestration.orchestrator.domain.entity.shipping.Shipping;
+import com.xabe.orchestration.orchestrator.domain.entity.shipping.ShippingStatus;
+import com.xabe.orchestration.orchestrator.domain.event.order.OrderCancelCommandEvent;
+import com.xabe.orchestration.orchestrator.domain.event.order.OrderCreateCommandEvent;
+import com.xabe.orchestration.orchestrator.domain.event.order.OrderCreatedEvent;
 import com.xabe.orchestration.orchestrator.infrastructure.persistence.dto.OrderAggregateDTO;
 import com.xabe.orchestration.orchestrator.infrastructure.persistence.dto.OrderAggregateStatusDTO;
 import com.xabe.orchestration.orchestrator.infrastructure.persistence.dto.OrderDTO;
@@ -109,6 +112,39 @@ public class OrderMother {
         .price(10L)
         .status(OrderStatusDTO.CREATED)
         .createdAt(OFFSET_DATE_TIME.toInstant())
+        .build();
+  }
+
+  public static OrderCreatedEvent createOrderCreatedEvent(final String operationStatus) {
+    return OrderCreatedEvent.builder()
+        .id(1L)
+        .userId("1")
+        .productId("2")
+        .purchaseId("3")
+        .price(10L)
+        .operationStatus(operationStatus)
+        .status("CREATED")
+        .createdAt(OFFSET_DATE_TIME.toInstant())
+        .build();
+  }
+
+  public static OrderCreateCommandEvent createOrderCreateCommandEvent() {
+    return OrderCreateCommandEvent.builder()
+        .userId("1")
+        .productId("2")
+        .price(10L)
+        .purchaseId("3")
+        .sentAt(OFFSET_DATE_TIME.toInstant())
+        .build();
+  }
+
+  public static OrderCancelCommandEvent createOrderCancelCommandEvent() {
+    return OrderCancelCommandEvent.builder()
+        .orderId(5L)
+        .userId("1")
+        .productId("2")
+        .purchaseId("3")
+        .sentAt(OFFSET_DATE_TIME.toInstant())
         .build();
   }
 }

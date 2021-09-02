@@ -1,6 +1,9 @@
 package com.xabe.orchestration.orchestrator.domain.entity;
 
 import com.xabe.orchestation.common.infrastructure.AggregateRoot;
+import com.xabe.orchestration.orchestrator.domain.entity.order.Order;
+import com.xabe.orchestration.orchestrator.domain.entity.payment.Payment;
+import com.xabe.orchestration.orchestrator.domain.entity.shipping.Shipping;
 import java.time.OffsetDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

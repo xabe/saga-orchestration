@@ -1,4 +1,4 @@
-package com.xabe.orchestration.orchestrator.domain.event;
+package com.xabe.orchestration.orchestrator.domain.event.order;
 
 import com.xabe.orchestation.common.infrastructure.Event;
 import java.time.Instant;

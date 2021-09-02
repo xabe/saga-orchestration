@@ -4,9 +4,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.xabe.orchestation.common.infrastructure.dispatch.CommandDispatcher;
 import com.xabe.orchestration.orchestrator.domain.entity.OrderAggregate;
 import com.xabe.orchestration.orchestrator.domain.repository.OrderRepository;
 import io.smallrye.mutiny.Uni;
@@ -18,19 +21,22 @@ class OrderUseCaseImplTest {
 
   private OrderRepository orderRepository;
 
+  private CommandDispatcher commandDispatcher;
+
   private OrderUseCase orderUseCase;
 
   @BeforeEach
   public void setUp() throws Exception {
     this.orderRepository = mock(OrderRepository.class);
-    this.orderUseCase = new OrderUseCaseImpl(this.orderRepository);
+    this.commandDispatcher = mock(CommandDispatcher.class);
+    this.orderUseCase = new OrderUseCaseImpl(this.orderRepository, this.commandDispatcher);
   }
 
   @Test
   public void givenAIdWhenInvokeGetOrderThenReturnOrden() throws Exception {
     //Given
     final String id = "id";
-    when(this.orderRepository.getOrder(id)).thenReturn(Uni.createFrom().item(OrderAggregate.builder().build()));
+    when(this.orderRepository.load(id)).thenReturn(Uni.createFrom().item(OrderAggregate.builder().build()));
 
     //When
     final Uni<OrderAggregate> order = this.orderUseCase.getOrder(id);
@@ -44,7 +50,7 @@ class OrderUseCaseImplTest {
   @Test
   public void shouldGetAllOrders() throws Exception {
     //Given
-    when(this.orderRepository.getOrders()).thenReturn(Uni.createFrom().item(List.of(OrderAggregate.builder().build())));
+    when(this.orderRepository.getAll()).thenReturn(Uni.createFrom().item(List.of(OrderAggregate.builder().build())));
 
     //When
     final Uni<List<OrderAggregate>> orders = this.orderUseCase.getOrders();
@@ -60,7 +66,7 @@ class OrderUseCaseImplTest {
   public void shouldCreateOrder() throws Exception {
     //Given
     final OrderAggregate orderAggregate = OrderAggregate.builder().build();
-    when(this.orderRepository.upsert(orderAggregate)).thenReturn(Uni.createFrom().item(orderAggregate));
+    when(this.orderRepository.save(orderAggregate)).thenReturn(Uni.createFrom().item(orderAggregate));
 
     //When
     final Uni<OrderAggregate> result = this.orderUseCase.create(orderAggregate);
@@ -68,6 +74,7 @@ class OrderUseCaseImplTest {
     //Then
     assertThat(result, is(notNullValue()));
     assertThat(result.subscribeAsCompletionStage().get(), is(notNullValue()));
+    verify(this.commandDispatcher).dispatch(any());
   }
 
 }

@@ -47,8 +47,153 @@ quarkus:
     test-port: 8000
     port: 8000
     root-path: /api
-  hibernate-orm:
-    database:
-      generation: drop-and-create
-    log:
-      sql: true
+
+
+kafka:
+  bootstrap:
+    servers:
+      - localhost:9092
+
+mp:
+  messaging:
+    incoming:
+      status:
+        connector: smallrye-kafka
+        topic: status.v1
+        key:
+          deserializer: org.apache.kafka.common.serialization.StringDeserializer
+        value:
+          deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+        schema:
+          reflection: false
+          registry:
+            url: http://localhost:8081
+        request:
+          timeout:
+            ms: 30000
+        specific:
+          avro:
+            reader: true
+        use:
+          latest:
+            version: true
+        auto:
+          offset:
+            reset: latest
+          register:
+            schemas: false
+          commit:
+            interval:
+              ms: 100
+        group:
+          id: status-consumer-group
+        enable:
+          auto:
+            commit: false
+        partitions: 1
+    outgoing:
+      orders:
+        connector: smallrye-kafka
+        topic: orders.v1
+        acks: all
+        key:
+          serializer: org.apache.kafka.common.serialization.StringSerializer
+        value:
+          serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+        schema:
+          reflection: false
+          registry:
+            url: http://localhost:8081
+        request:
+          timeout:
+            ms: 30000
+        use:
+          latest:
+            version: true
+        max-inflight-messages: 5
+        compression:
+          type: none
+        enable:
+          idempotence: true
+        retries: 10
+        max:
+          block:
+            ms: 1000
+        linger:
+          ms: 20
+        batch:
+          size: 32768
+        auto:
+          register:
+            schemas: false
+        partition: -1
+      payments:
+        connector: smallrye-kafka
+        topic: payments.v1
+        acks: all
+        key:
+          serializer: org.apache.kafka.common.serialization.StringSerializer
+        value:
+          serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+        schema:
+          reflection: false
+          registry:
+            url: http://localhost:8081
+        request:
+          timeout:
+            ms: 30000
+        use:
+          latest:
+            version: true
+        max-inflight-messages: 5
+        compression:
+          type: none
+        enable:
+          idempotence: true
+        retries: 10
+        max:
+          block:
+            ms: 1000
+        linger:
+          ms: 20
+        batch:
+          size: 32768
+        auto:
+          register:
+            schemas: false
+        partition: -1
+      shipments:
+        connector: smallrye-kafka
+        topic: shipments.v1
+        acks: all
+        key:
+          serializer: org.apache.kafka.common.serialization.StringSerializer
+        value:
+          serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+        schema:
+          reflection: false
+          registry:
+            url: http://localhost:8081
+        request:
+          timeout:
+            ms: 30000
+        use:
+          latest:
+            version: true
+        max-inflight-messages: 5
+        compression:
+          type: none
+        enable:
+          idempotence: true
+        retries: 10
+        max:
+          block:
+            ms: 1000
+        linger:
+          ms: 20
+        batch:
+          size: 32768
+        auto:
+          register:
+            schemas: false
+        partition: -1

@@ -3,7 +3,6 @@ package com.xabe.orchestation.common.infrastructure.dispatch;
 import com.xabe.orchestation.common.infrastructure.AggregateRoot;
 import com.xabe.orchestation.common.infrastructure.event.EventPublisher;
 import com.xabe.orchestation.common.infrastructure.repository.Repository;
-import lombok.NonNull;
 
 public class CommandContext<T extends AggregateRoot<U>, U> {
 
@@ -16,7 +15,6 @@ public class CommandContext<T extends AggregateRoot<U>, U> {
     this.eventPublisher = eventPublisher;
   }
 
-  @NonNull
   public Repository<T, U> getRepository() {
     return this.repository;
   }

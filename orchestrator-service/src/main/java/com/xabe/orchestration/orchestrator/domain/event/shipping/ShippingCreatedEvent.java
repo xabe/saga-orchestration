@@ -1,4 +1,4 @@
-package com.xabe.orchestration.orchestrator.domain.event;
+package com.xabe.orchestration.orchestrator.domain.event.shipping;
 
 import com.xabe.orchestation.common.infrastructure.Event;
 import java.time.Instant;
@@ -16,9 +16,9 @@ import lombok.Value;
 @ToString
 @NoArgsConstructor(force = true, access = AccessLevel.PUBLIC)
 @AllArgsConstructor
-public class OrderCancelCommandEvent implements Event {
+public class ShippingCreatedEvent implements Event {
 
-  Long orderId;
+  Long id;
 
   String purchaseId;
 
@@ -26,8 +26,12 @@ public class OrderCancelCommandEvent implements Event {
 
   String productId;
 
-  Instant sentAt;
+  Instant createdAt;
+
+  Long price;
 
   String status;
+
+  String operationStatus;
 
 }

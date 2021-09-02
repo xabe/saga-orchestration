@@ -41,7 +41,7 @@ class OderRepositoryImplTest {
     when(this.orderRepositoryPanache.findById(new ObjectId(id))).thenReturn(Uni.createFrom().item(orderAggregateDTO));
 
     //When
-    final Uni<OrderAggregate> result = this.orderRepository.getOrder(id);
+    final Uni<OrderAggregate> result = this.orderRepository.load(id);
 
     //Then
     assertThat(result, is(notNullValue()));
@@ -73,7 +73,7 @@ class OderRepositoryImplTest {
     when(this.orderRepositoryPanache.listAll()).thenReturn(Uni.createFrom().item(List.of(orderAggregateDTO)));
 
     //When
-    final Uni<List<OrderAggregate>> result = this.orderRepository.getOrders();
+    final Uni<List<OrderAggregate>> result = this.orderRepository.getAll();
 
     //Then
     assertThat(result, is(notNullValue()));
@@ -110,7 +110,7 @@ class OderRepositoryImplTest {
         .persistOrUpdate(orderAggregateDTO);
 
     //When
-    final Uni<OrderAggregate> result = this.orderRepository.upsert(orderAggregate);
+    final Uni<OrderAggregate> result = this.orderRepository.save(orderAggregate);
 
     //Then
     assertThat(result, is(notNullValue()));

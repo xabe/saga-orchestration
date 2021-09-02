@@ -21,19 +21,19 @@ class OderRepositoryImpl implements OrderRepository {
   private final OrderRepositoryPanache orderRepositoryPanache;
 
   @Override
-  public Uni<OrderAggregate> getOrder(final String id) {
+  public Uni<OrderAggregate> load(final String id) {
     this.logger.debug("Get Order {}", id);
     return this.orderRepositoryPanache.findById(new ObjectId(id)).map(this.persistenceMapper::toEntity);
   }
 
   @Override
-  public Uni<List<OrderAggregate>> getOrders() {
+  public Uni<List<OrderAggregate>> getAll() {
     this.logger.debug("Get Orders");
     return this.orderRepositoryPanache.listAll().map(this.persistenceMapper::toOrdersEntity);
   }
 
   @Override
-  public Uni<OrderAggregate> upsert(final OrderAggregate orderAggregate) {
+  public Uni<OrderAggregate> save(final OrderAggregate orderAggregate) {
     this.logger.debug("Create Order {}", orderAggregate);
     return this.orderRepositoryPanache.persistOrUpdate(this.persistenceMapper.toDTO(orderAggregate)).map(this.persistenceMapper::toEntity);
   }

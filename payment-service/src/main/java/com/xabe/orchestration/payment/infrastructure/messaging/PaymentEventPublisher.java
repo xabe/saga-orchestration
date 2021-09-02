@@ -73,16 +73,16 @@ public class PaymentEventPublisher implements EventPublisher {
   }
 
   private void paymentCanceledEvent(final Event event) {
-    final PaymentCanceledEvent orderCanceledEvent = PaymentCanceledEvent.class.cast(event);
-    final Payment payment = this.messagingMapper.toAvroEvent(orderCanceledEvent);
+    final PaymentCanceledEvent paymentCanceledEvent = PaymentCanceledEvent.class.cast(event);
+    final Payment payment = this.messagingMapper.toAvroEvent(paymentCanceledEvent);
     final com.xabe.avro.v1.PaymentCanceledEvent canceledEvent = com.xabe.avro.v1.PaymentCanceledEvent.newBuilder()
         .setPayment(payment)
         .setUpdatedAt(Instant.now())
-        .setOperationStatus(PaymentOperationStatus.valueOf(orderCanceledEvent.getOperationStatus()))
+        .setOperationStatus(PaymentOperationStatus.valueOf(paymentCanceledEvent.getOperationStatus()))
         .build();
     final MessageEnvelopeStatus messageEnvelopeStatus =
         MessageEnvelopeStatus.newBuilder().setMetadata(this.createMetaData()).setPayload(canceledEvent).build();
-    this.statusEmitter.send(Message.of(messageEnvelopeStatus, this.createMetaDataKafka(orderCanceledEvent.getId().toString())));
+    this.statusEmitter.send(Message.of(messageEnvelopeStatus, this.createMetaDataKafka(paymentCanceledEvent.getId().toString())));
     this.logger.info("Send Event PaymentCanceledEvent {}", messageEnvelopeStatus);
   }
 
