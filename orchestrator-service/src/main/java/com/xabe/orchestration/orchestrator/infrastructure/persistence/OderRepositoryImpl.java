@@ -23,7 +23,12 @@ class OderRepositoryImpl implements OrderRepository {
   @Override
   public Uni<OrderAggregate> load(final String id) {
     this.logger.debug("Get Order {}", id);
-    return this.orderRepositoryPanache.findById(new ObjectId(id)).map(this.persistenceMapper::toEntity);
+    try {
+      return this.orderRepositoryPanache.findById(new ObjectId(id)).map(this.persistenceMapper::toEntity);
+    } catch (final IllegalArgumentException exception) {
+      return Uni.createFrom().nullItem();
+    }
+
   }
 
   @Override

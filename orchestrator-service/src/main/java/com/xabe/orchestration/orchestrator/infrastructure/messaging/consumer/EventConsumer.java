@@ -33,7 +33,7 @@ public class EventConsumer {
       this.logger.warn("Received a non supported message. Type: {}, toString: {}", msgClass.getName(), payload);
     } else {
       handler.handle(payload);
-      this.logger.debug("Received a message. message: {} metadata {}", message, metadata);
+      this.logger.debug("Received a message. payload: {} metadata {}", payload, metadata);
     }
     return message.ack();
   }

@@ -77,11 +77,11 @@ public class SagaEventTest {
 
   public static final int POLL_INTERVAL_MS = 500;
 
-  public static final String USER_ID = "1";
+  public static final String USER_ID = "2";
 
-  public static final String PRODUCT_ID = "1";
+  public static final String PRODUCT_ID = "2";
 
-  public static final Long PRICE = 100L;
+  public static final Long PRICE = 200L;
 
   public static final Long ID_ORDER = 200L;
 
@@ -136,7 +136,7 @@ public class SagaEventTest {
         new KafkaConsumer<>("payments.v1", (message, payloadClass) -> message.getPayload().getClass().equals(payloadClass));
     KAFKA_CONSUMER_SHIPPING =
         new KafkaConsumer<>("shipments.v1", (message, payloadClass) -> message.getPayload().getClass().equals(payloadClass));
-    TimeUnit.SECONDS.sleep(5);
+    TimeUnit.SECONDS.sleep(10);
   }
 
   @AfterAll
