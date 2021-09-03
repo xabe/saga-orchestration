@@ -1,6 +1,7 @@
 package com.xabe.orchestration.orchestrator.domain.command.payment;
 
 import com.xabe.orchestation.common.infrastructure.Command;
+import com.xabe.orchestation.common.infrastructure.exception.EntityNotFoundException;
 import com.xabe.orchestration.orchestrator.domain.entity.OrderAggregate;
 import com.xabe.orchestration.orchestrator.domain.entity.OrderAggregateStatus;
 import com.xabe.orchestration.orchestrator.domain.entity.order.Order;
@@ -27,10 +28,11 @@ public class PaymentCreateCommand implements Command<PaymentCreateCommandContext
   @Override
   public void execute(final PaymentCreateCommandContext context) {
     context.getRepository().load(this.aggregateRootId)
+        .onItem().ifNull().failWith(() -> new EntityNotFoundException("OrderAggregate"))
         .flatMap(this.updateOrderAggregate(context))
         .subscribe()
         .with(this.sendPaymentCreateCommand(context),
-            throwable -> this.logger.error("Error to save orderAggregate with payment create command", throwable));
+            throwable -> this.logger.error("Error to save orderAggregate {} with payment create command", this.aggregateRootId, throwable));
   }
 
   private Function<OrderAggregate, Uni<? extends OrderAggregate>> updateOrderAggregate(final PaymentCreateCommandContext context) {

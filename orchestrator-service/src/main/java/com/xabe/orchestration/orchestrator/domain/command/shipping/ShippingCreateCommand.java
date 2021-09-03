@@ -1,6 +1,7 @@
 package com.xabe.orchestration.orchestrator.domain.command.shipping;
 
 import com.xabe.orchestation.common.infrastructure.Command;
+import com.xabe.orchestation.common.infrastructure.exception.EntityNotFoundException;
 import com.xabe.orchestration.orchestrator.domain.entity.OrderAggregate;
 import com.xabe.orchestration.orchestrator.domain.entity.OrderAggregateStatus;
 import com.xabe.orchestration.orchestrator.domain.entity.payment.Payment;
@@ -27,10 +28,11 @@ public class ShippingCreateCommand implements Command<ShippingCreateCommandConte
   @Override
   public void execute(final ShippingCreateCommandContext context) {
     context.getRepository().load(this.aggregateRootId)
+        .onItem().ifNull().failWith(() -> new EntityNotFoundException("OrderAggregate"))
         .flatMap(this.updateOrderAggregate(context))
         .subscribe()
         .with(this.sendShippingCreateCommand(context),
-            throwable -> this.logger.error("Error to save orderAggregate with shipping create command", throwable));
+            throwable -> this.logger.error("Error to save orderAggregate {} with shipping create command", this.aggregateRootId, throwable));
   }
 
   private Function<OrderAggregate, Uni<? extends OrderAggregate>> updateOrderAggregate(final ShippingCreateCommandContext context) {

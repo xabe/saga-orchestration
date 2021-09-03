@@ -2,6 +2,7 @@ package com.xabe.orchestration.orchestrator.infrastructure.messaging.consumer;
 
 import com.xabe.orchestation.common.infrastructure.Event;
 import com.xabe.orchestation.common.infrastructure.event.EventConsumer;
+import com.xabe.orchestation.common.infrastructure.exception.EntityNotFoundException;
 import com.xabe.orchestration.orchestrator.domain.entity.OrderAggregate;
 import com.xabe.orchestration.orchestrator.domain.entity.OrderAggregateStatus;
 import com.xabe.orchestration.orchestrator.domain.entity.shipping.Shipping;
@@ -60,11 +61,13 @@ public class ShippingEventConsumer implements EventConsumer {
     final ShippingCreatedEvent shippingCreatedEvent = ShippingCreatedEvent.class.cast(event);
     final Shipping shipping = this.messagingConsumerMapper.toShippingEntity(shippingCreatedEvent);
     if (SUCCESS.equalsIgnoreCase(shippingCreatedEvent.getOperationStatus())) {
-      this.orderRepository.load(shippingCreatedEvent.getPurchaseId())
+      final String purchaseId = shippingCreatedEvent.getPurchaseId();
+      this.orderRepository.load(purchaseId)
+          .onItem().ifNull().failWith(() -> new EntityNotFoundException("OrderAggregate"))
           .flatMap(this.updateOrderAggregate(shipping))
           .subscribe()
           .with(this.successUpdateOrderAggregate(),
-              throwable -> this.logger.error("Error to save orderAggregate with shipping create command", throwable));
+              throwable -> this.logger.error("Error to save orderAggregate {} with shipping create command", purchaseId, throwable));
     } else {
       this.logger.error("Error to create shipping {}", shippingCreatedEvent);
     }
